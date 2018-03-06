@@ -14,7 +14,7 @@ public class TesteConsole {
 		Servidor feed = null;
 		try {
 			feed = new Servidor(4040);
-			Scanner scanner = new Scanner(System.in);
+			Scanner scanner;
 
 			Thread servidorOuvir = new Thread(feed);
 			servidorOuvir.start();
@@ -26,6 +26,7 @@ public class TesteConsole {
 				System.out.println("ip e/ou porta passados em branco. encerrando programa");
 				System.exit(0);
 			}
+			scanner = new Scanner(System.in);
 			Conexao cliente = new Conexao(ip, Integer.parseInt(strPorta));
 			while (true) {
 				System.out.println("Digite uma mensagem para enviar:");

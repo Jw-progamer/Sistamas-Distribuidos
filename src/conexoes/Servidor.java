@@ -19,15 +19,23 @@ public class Servidor implements Runnable {
 	public void loopServidor() throws IOException {
 		byte[] buffer = new byte[1024];
 		cliente = entrada.accept();
+		int estadoBruto = 0;
 		while (flag) {
-			if (cliente.getInputStream().read(buffer) != 0) {
-				String msg = new String(buffer, "UTF-8");
-				System.out.println(msg);
+			if (cliente.isConnected() && estadoBruto != -1) {
+				if ((estadoBruto = cliente.getInputStream().read(buffer)) != 0) {
+					String msg = new String(buffer, "UTF-8");
+					System.out.println(msg);
+					buffer = new byte[1024];
+				} else {
+					continue;
+				}
 			} else {
-				continue;
+				flag = false;
+				System.out.println("O computador "+ cliente.getInetAddress().getHostAddress()+ " desconectou. Emcerrando servidor");
 			}
 		}
 		cliente.close();
+
 	}
 
 	public int getPorta() {
