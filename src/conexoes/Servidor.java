@@ -4,14 +4,18 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import interfaces.Callback;
+
 public class Servidor implements Runnable {
 	private int porta;
 	private ServerSocket entrada;
 	private Socket cliente;
+	private Callback feed;
 	private boolean flag;
 
-	public Servidor(int porta) throws IOException {
+	public Servidor(int porta, Callback feed) throws IOException {
 		this.porta = porta;
+		this.feed = feed;
 		this.flag = true;
 		this.entrada = new ServerSocket(porta);
 	}
@@ -25,6 +29,7 @@ public class Servidor implements Runnable {
 				if ((estadoBruto = cliente.getInputStream().read(buffer)) != 0) {
 					String msg = new String(buffer, "UTF-8");
 					System.out.println(msg);
+					feed.atualizarMensagens(msg);
 					buffer = new byte[1024];
 				} else {
 					continue;

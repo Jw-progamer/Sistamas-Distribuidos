@@ -15,8 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="628.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.162-ea" xmlns:fx="http://javafx.com/fxml/1">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="628.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.162-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visao.TelaController">
   <tabs>
     <Tab text="Servidor">
          <content>
@@ -31,7 +30,7 @@
                      <children>
                         <Label text="porta de acesso:" />
                         <TextField fx:id="portaServidorTxt" />
-                        <CheckBox fx:id="aceitandoConexaoCheck" mnemonicParsing="false" text="Aceitando conexoes" />
+                        <CheckBox fx:id="aceitandoConexaoCheck" mnemonicParsing="false" onAction="#ligarServidor" text="Aceitando conexoes" />
                      </children>
                   </HBox>
                </children>
@@ -68,12 +67,15 @@
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <Label text="Endereço ip:" />
                               <Label text="Porta Logica:" GridPane.rowIndex="1" />
                               <TextField fx:id="enderecoTxt" GridPane.columnIndex="1" />
                               <TextField fx:id="portaTxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Conectar:" GridPane.rowIndex="2" />
+                              <Button fx:id="conectarBtn" mnemonicParsing="false" onAction="#conectar" text="Conectar" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
@@ -84,7 +86,7 @@
                                  </font>
                               </Label>
                               <TextArea fx:id="mensagemTxt" prefHeight="200.0" prefWidth="200.0" />
-                              <Button fx:id="enviarBtn" mnemonicParsing="false" text="Enviar" />
+                              <Button fx:id="enviarBtn" mnemonicParsing="false" onAction="#enviarMensagem" text="Enviar" />
                            </children>
                         </VBox>
                      </children>

@@ -15,12 +15,18 @@ public class Conexao {
 		this.porta = porta;
 		this.conexao = new Socket(ip, porta);
 	}
+	
+	public Conexao(Socket conexao) {
+		this.conexao = conexao;
+		this.ip = conexao.getInetAddress().getHostAddress();
+		this.porta = conexao.getPort();
+	}
 
 	public void conectarEnviar(String msg) throws IOException {
 		if (conexao.isConnected()) {
 			enviar(msg);
 		} else {
-			System.out.println("computador " + conexao.getInetAddress().getHostAddress() + " Encerrou");
+			System.err.println("computador " + conexao.getInetAddress().getHostAddress() + " Encerrou");
 		}
 	}
 
