@@ -1,15 +1,21 @@
 package visao;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import controle.ConexoesFachada;
 import interfaces.Callback;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class TelaController implements Callback {
+public class TelaController implements Callback, Initializable{
 	@FXML
 	TextArea feedTxt;
 	@FXML
@@ -21,11 +27,22 @@ public class TelaController implements Callback {
 	@FXML
 	Button enviarBtn;
 	@FXML
+	Button conectarNovo;
+	@FXML
 	TextField portaServidorTxt;
+	@FXML
+	TextField enderecoTxtNovo;
+	@FXML
+	TextField portaTxtNovo;
 	@FXML
 	CheckBox aceitandoConexaoCheck;
 	@FXML
-	Button conectarBtn;
+	ListView<String> listaConexao;
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+	 listaConexao.setItems(FXCollections.observableArrayList());	
+	}
 
 	public void ligarServidor() {
 		ConexoesFachada rede = ConexoesFachada.getINSTANCIA();
@@ -49,15 +66,22 @@ public class TelaController implements Callback {
 		}
 	}
 
-	public void conectar() {
+	public void conectar() throws Exception{
 		ConexoesFachada rede = ConexoesFachada.getINSTANCIA();
-		if (enderecoTxt.getText().equals("") || portaTxt.getText().equals("")) {
+		if (enderecoTxtNovo.getText().equals("") || portaTxtNovo.getText().equals("")) {
 			alertaDeWarning("Erro ao conectar",
 					"Você não passou um endereço ip ou porta lógico. um ou ambos estão em branco");
 		} else {
-			int porta = Integer.parseInt(portaTxt.getText());
-			if (rede.conectar(enderecoTxt.getText(), porta)) {
+			String endereco = enderecoTxtNovo.getText();
+			int porta = Integer.parseInt(portaTxtNovo.getText());
+			if (rede.conectar(endereco, porta)) {
 				System.out.println("Cheguei aqui, conecção feita");
+				enderecoTxtNovo.setText(null);
+				portaTxtNovo.setText(null);
+				String teste = rede.getConexao(endereco, porta).toString();
+				System.out.println(teste);
+				listaConexao.getItems().add(teste);
+				
 			} else {
 				alertaDeWarning("Erro ao se conectar com outra máquina",
 						"Algo falhou com a conecção. Por favor reporte esse erro ao desenvolvedor");
@@ -68,7 +92,9 @@ public class TelaController implements Callback {
 	public void enviarMensagem() {
 		ConexoesFachada rede = ConexoesFachada.getINSTANCIA();
 		String msg = mensagemTxt.getText();
-		if (rede.enviarMensagem(msg)) {
+		String endereco = enderecoTxt.getText();
+		int porta = Integer.parseInt(portaTxt.getText());
+		if (rede.enviarMensagem(msg, endereco, porta)) {
 			System.out.println("Cheguei aqui, mensagem enviada");
 			mensagemTxt.setText(null);
 		} else {
@@ -96,4 +122,5 @@ public class TelaController implements Callback {
 			feedTxt.setText(novo);
 		}
 	}
+
 }

@@ -15,7 +15,7 @@ public class Conexao {
 		this.porta = porta;
 		this.conexao = new Socket(ip, porta);
 	}
-	
+
 	public Conexao(Socket conexao) {
 		this.conexao = conexao;
 		this.ip = conexao.getInetAddress().getHostAddress();
@@ -39,6 +39,10 @@ public class Conexao {
 		} catch (UnsupportedEncodingException e) {
 			// TODO: handle exception
 		}
+	}
+
+	public boolean isConnect() {
+		return conexao.isConnected();
 	}
 
 	public Socket getConexao() {
@@ -65,5 +69,9 @@ public class Conexao {
 		this.porta = porta;
 	}
 
-
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "endereço ip: " + ip + "; Porta de conexao: " + porta;
+	}
 }

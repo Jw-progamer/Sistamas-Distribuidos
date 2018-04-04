@@ -19,6 +19,14 @@ public class Servidor implements Runnable {
 		this.flag = true;
 		this.entrada = new ServerSocket(porta);
 	}
+	
+
+	public Servidor(int porta) throws IOException {
+		this.porta = porta;
+		this.feed = null;
+		this.flag = true;
+		this.entrada = new ServerSocket(porta);
+	}
 
 	public void loopServidor() throws IOException {
 		byte[] buffer = new byte[1024];
