@@ -6,7 +6,7 @@ import java.util.List;
 
 import conexoes.Conexao;
 import conexoes.Servidor;
-import interfaces.Callback;
+import interfaces.CallbackInterface;
 
 public class ConexoesFachada {
 	private static ConexoesFachada INSTANCIA = new ConexoesFachada();
@@ -21,7 +21,7 @@ public class ConexoesFachada {
 		return INSTANCIA;
 	}
 
-	public boolean iniciarServidor(int porta, Callback front) {
+	public boolean iniciarServidor(int porta, CallbackInterface front) {
 		if (ouvinte != null) {
 			ouvinte.setFlag(false);
 			try {

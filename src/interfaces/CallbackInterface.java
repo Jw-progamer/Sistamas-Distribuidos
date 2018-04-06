@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface Callback {
+public interface CallbackInterface {
 
 	public void atualizarMensagens(String Mensagem);
 	

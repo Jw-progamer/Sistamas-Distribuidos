@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import controle.ConexoesFachada;
-import interfaces.Callback;
+import interfaces.CallbackInterface;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,7 +15,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class TelaController implements Callback, Initializable{
+public class TelaController implements CallbackInterface, Initializable{
 	@FXML
 	TextArea feedTxt;
 	@FXML
