@@ -9,14 +9,14 @@ import java.util.List;
 import interfaces.CallbackInterface;
 import interfaces.CallbackOuvinte;
 
-public class Servidor implements Runnable, CallbackOuvinte {
+public class Hud implements Runnable, CallbackOuvinte {
 	private int porta;
 	private ServerSocket entrada;
 	private List<Ouvinte> ouvintes;
 	private CallbackInterface feed;
 	private boolean flag;
 
-	public Servidor(int porta, CallbackInterface feed) throws IOException {
+	public Hud(int porta, CallbackInterface feed) throws IOException {
 		this.porta = porta;
 		this.feed = feed;
 		this.flag = true;
@@ -24,7 +24,7 @@ public class Servidor implements Runnable, CallbackOuvinte {
 		this.ouvintes = new LinkedList<>();
 	}
 
-	public Servidor(int porta) throws IOException {
+	public Hud(int porta) throws IOException {
 		this.porta = porta;
 		this.feed = null;
 		this.flag = true;
@@ -40,6 +40,13 @@ public class Servidor implements Runnable, CallbackOuvinte {
 			ouvintes.add(novoOuvinte);
 			ouvir.start();
 		}
+	}
+	
+	public void conexaoManual(Socket novaConexao) {
+		Ouvinte novo = new Ouvinte(novaConexao, this);
+		Thread ouvir = new Thread(novo);
+		ouvintes.add(novo);
+		ouvir.start();
 	}
 
 	public int getPorta() {
@@ -64,6 +71,16 @@ public class Servidor implements Runnable, CallbackOuvinte {
 
 	public void setFlag(boolean flag) {
 		this.flag = flag;
+	}
+	
+	
+
+	public List<Ouvinte> getOuvintes() {
+		return ouvintes;
+	}
+
+	public void setOuvintes(List<Ouvinte> ouvintes) {
+		this.ouvintes = ouvintes;
 	}
 
 	@Override

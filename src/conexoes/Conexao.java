@@ -30,6 +30,32 @@ public class Conexao {
 		}
 	}
 
+	public String conectarReceber() throws IOException {
+		if (conexao.isConnected()) {
+			return receber();
+		} else {
+			System.err.println("computador " + conexao.getInetAddress().getHostAddress() + " Encerrou");
+			return null;
+		}
+	}
+
+	private String receber() throws IOException {
+		byte[] buffer = new byte[1024];
+		int estadoBruto = 0;
+		if (conexao.isConnected() && estadoBruto != -1) {
+			if ((estadoBruto = conexao.getInputStream().read(buffer)) != 0) {
+				String msg = new String(buffer, "UTF-8");
+				System.out.println(msg);
+				return msg;
+			} else {
+				System.out.println(
+						"O computador " + conexao.getInetAddress().getHostAddress() + " desconectou. Encerrando porta");
+				return null;
+			}
+		}
+		return null;
+	}
+
 	private void enviar(String msg) throws IOException {
 		byte[] bmsg;
 		try {

@@ -1,17 +1,15 @@
 package controle;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
+import java.net.Socket;
 import conexoes.Conexao;
-import conexoes.Servidor;
+import conexoes.Hud;
+import conexoes.Ouvinte;
 import interfaces.CallbackInterface;
 
 public class ConexoesFachada {
 	private static ConexoesFachada INSTANCIA = new ConexoesFachada();
-	private Servidor ouvinte;
-	private List<Conexao> conexoes = new LinkedList<Conexao>();
+	private Hud ouvinte;
 
 	private ConexoesFachada() {
 
@@ -25,7 +23,7 @@ public class ConexoesFachada {
 		if (ouvinte != null) {
 			ouvinte.setFlag(false);
 			try {
-				ouvinte = new Servidor(porta, front);
+				ouvinte = new Hud(porta, front);
 				Thread ouvir = new Thread(ouvinte);
 				ouvir.start();
 				return true;
@@ -37,7 +35,7 @@ public class ConexoesFachada {
 			}
 		} else {
 			try {
-				ouvinte = new Servidor(porta, front);
+				ouvinte = new Hud(porta, front);
 				Thread ouvir = new Thread(ouvinte);
 				ouvir.start();
 				System.out.println("Servidor iniciado");
@@ -56,20 +54,20 @@ public class ConexoesFachada {
 	}
 
 	public boolean enviarMensagem(String msg, String ip, int porta) {
-		for (Conexao c : conexoes) {
-			if (c.getIp().equals(ip) && c.getPorta() == porta) {
-				if (c.isConnect()) {
+		for (Ouvinte c : ouvinte.getOuvintes()) {
+			if (c.getConexao().getIp().equals(ip) && c.getConexao().getPorta() == porta) {
+				if (c.getConexao().isConnect()) {
 					try {
-						c.conectarEnviar(msg);
+						c.getConexao().conectarEnviar(msg);
 						return true;
 					} catch (IOException e) {
-						System.err.println("Pode ter ocorrido um erro de conexão com a máquina " + c.getIp()
-								+ c.getPorta() + ". Provavelmente conexão recusa");
+						System.err.println("Pode ter ocorrido um erro de conexão com a máquina " + c.getConexao().getIp()
+								+ c.getConexao().getPorta() + ". Provavelmente conexão recusa");
 						e.printStackTrace();
 						return false;
 					}
 				} else {
-					System.err.println("log: " + c.getIp() + c.getPorta() + " desligado");
+					System.err.println("log: " + c.getConexao().getIp() + c.getConexao().getPorta() + " desligado");
 					return false;
 				}
 			}
@@ -79,15 +77,15 @@ public class ConexoesFachada {
 	}
 
 	public boolean conectar(String ip, int porta) {
-		for(Conexao c: conexoes) {
-			if (c.getIp().equals(ip) && c.getPorta() == porta) {
+		for(Ouvinte c: ouvinte.getOuvintes()) {
+			if (c.getConexao().getIp().equals(ip) && c.getConexao().getPorta() == porta) {
 				System.out.println("Já conectado a um endereço ip");
 				return false;
 			}
 		}
 		try {
-			Conexao conexao = new Conexao(ip, porta);
-			conexoes.add(conexao);
+			Socket conexao = new Socket(ip, porta);
+			ouvinte.conexaoManual(conexao);
 			return true;
 		} catch (IOException e) {
 			System.out.println("Não foi possível conectar ao endereço");
@@ -96,20 +94,20 @@ public class ConexoesFachada {
 		}
 	}
 
-	public Servidor getOuvinte() {
+	public Hud getOuvinte() {
 		return ouvinte;
 	}
 
-	public void setOuvinte(Servidor ouvinte) {
+	public void setOuvinte(Hud ouvinte) {
 		this.ouvinte = ouvinte;
 	}
 
 	public Conexao getConexao(String ip, int porta) {
-		for(Conexao c: conexoes) {
+		for(Ouvinte c: ouvinte.getOuvintes()) {
 			System.out.println(c);
-			if (c.getIp().equals(ip) && c.getPorta() == porta) {
+			if (c.getConexao().getIp().equals(ip) && c.getConexao().getPorta() == porta) {
 				System.out.println("Cheguei no retorno");
-				return c;
+				return c.getConexao();
 			}
 		}
 		return null;
