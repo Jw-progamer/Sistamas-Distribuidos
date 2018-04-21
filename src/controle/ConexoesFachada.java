@@ -53,9 +53,9 @@ public class ConexoesFachada {
 		ouvinte = null;
 	}
 
-	public boolean enviarMensagem(String msg, String ip, int porta) {
+	public boolean enviarMensagem(String msg, String ip) {
 		for (Ouvinte c : ouvinte.getOuvintes()) {
-			if (c.getConexao().getIp().equals(ip) && c.getConexao().getPorta() == porta) {
+			if (c.getConexao().getIp().equals(ip)) {
 				if (c.getConexao().isConnect()) {
 					try {
 						c.getConexao().conectarEnviar(msg);
