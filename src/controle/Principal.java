@@ -5,7 +5,7 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -13,8 +13,9 @@ public class Principal extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		TabPane principal = FXMLLoader.load(getClass().getResource("/asserts/Tela.fxml"));
+		BorderPane principal = FXMLLoader.load(getClass().getResource("/asserts/ScreenVm.fxml"));
 		Scene root = new Scene(principal);
+		root.getStylesheets().add("/asserts/style.css");
 		primaryStage.setScene(root);
 		primaryStage.setTitle("Sistemas Distribuidos");
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
